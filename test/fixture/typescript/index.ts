@@ -8,18 +8,20 @@ const server = createServer((req, res) => {
   res.end('\n');
 });
 
-server.once('listening', () => {
-  const addressInfo = server.address() || 'unknown';
-  const address = typeof addressInfo == 'string' ?
-    addressInfo : `${addressInfo.address}:${addressInfo.port}`;
+server
+  .once('listening', () => {
+    const addressInfo = server.address() || 'unknown';
+    const address =
+      typeof addressInfo == 'string' ? addressInfo : `${addressInfo.address}:${addressInfo.port}`;
 
-  console.log(`Server listening on ${address}`);
-  console.log(message);
-}).listen(0);
+    console.log(`Server listening on ${address}`);
+    console.log(message);
+  })
+  .listen(0);
 
 process.once('SIGTERM', () => {
   if (server.listening) {
-    server.close();
+    server.close(() => process.exit(0));
   }
 });
 
